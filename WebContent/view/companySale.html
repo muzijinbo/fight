@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example</title>
+
+		<style type="text/css">
+#container {
+	min-width: 310px;
+	max-width: 800px;
+	height: 400px;
+	margin: 0 auto
+}
+		</style>
+	</head>
+	<body>
+	<script src="../js/jquery.min.js"></script>
+<script src="../code/highcharts.js"></script>
+<script src="../code/modules/exporting.js"></script>
+
+<div id="container"></div>
+
+
+
+<script type="text/javascript">
+
+
+/* function bindEvent(){
+	
+} */
+$(document).ready(function() {
+	$.ajax({
+		type : "post",
+		url : "../CompanyServlet?method=getCompanySale",
+		data : {
+		},
+		success : function(data) {
+			var jdata = eval("("+data+")");
+			var title = {
+				      text: '航空公司销售曲线'   
+			};
+			var subtitle = {
+				      text: '2014-07-25'
+			};
+				   
+			var yAxis = {
+				      title: {
+				         text: '销售机票数量'
+			},
+				      plotLines: [{
+				         value: 50000,
+				         width: 2,
+				         color: '#808080'
+				}]
+			};   
+
+			var plotOptions = {
+				        series: {
+				            pointStart: 1
+				}
+			
+			};
+					   
+			var tooltip = {
+            	valueSuffix: '天'
+			}
+
+			var legend = {
+				      layout: 'vertical',
+				      align: 'right',
+				      verticalAlign: 'middle',
+				      borderWidth: 0
+			};
+
+			var series =  jdata;
+				 
+			console.info(jdata);
+			var json = {};
+
+			json.title = title;
+			json.subtitle = subtitle;
+				   
+			json.yAxis = yAxis;
+			json.tooltip = tooltip;
+			json.legend = legend;
+			json.series = series;
+			json.plotOptions =  plotOptions;
+				  
+					
+			$('#container').highcharts(json);
+		}
+	}); 
+	
+	    
+	}); 
+		</script>
+	</body>
+</html>

@@ -1,0 +1,87 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Highcharts 教程 | 菜鸟教程(runoob.com)</title>
+<script src="../js/jquery.min.js"></script>
+<script src="../code/highcharts.js"></script>
+</head>
+<body>
+<div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
+<div> <a href="JavaScript:window.open('charts.jsp','_self')"> 点击这里 </a></div>
+
+<script language="JavaScript">
+
+$(document).ready(function() {
+	$.ajax({
+		type : "post",
+		url : "../AgentServlet?method=getAgentSale",
+		data : {
+		},
+		success : function(data) {
+			var jdata = eval("("+data+")");
+			console.info(jdata);	
+			var chart = {
+				      type: 'area'
+			};
+		    var title = {
+				      text: '代理人买票售票数量'   
+			};
+			var subtitle = {
+				      text: '2017-6-10'  
+		   };
+		   var xAxis = {
+				allowDecimals: false,
+				      labels: {
+				         formatter: function () {
+				            return this.value; // clean, unformatted number for year
+				         }
+				      }
+			};
+			var yAxis = {
+				title: {
+				         text: '代理人每天买票售票数量'
+				},
+				labels: {
+				         formatter: function () {
+				            return this.value / 1000 + 'k';
+				         }
+				}
+			};
+		 	var tooltip = {
+				      pointFormat: '{series.name}票<b>{point.y}张</b><br/>在 {point.x}天'
+			};
+			var plotOptions = {
+				      area: {
+				         pointStart: 1,
+				         marker: {
+				            enabled: false,
+				            symbol: 'circle',
+				            radius: 2,
+				            states: {
+				               hover: {
+				                 enabled: true
+				               }
+				            }
+				         }
+				      }
+				
+			};
+			var series= jdata;     
+				      
+		    var json = {};   
+				   json.chart = chart; 
+				   json.title = title;   
+				   json.subtitle = subtitle; 
+				   json.tooltip = tooltip;
+				   json.xAxis = xAxis;
+				   json.yAxis = yAxis;  
+				   json.series = series;
+				   json.plotOptions = plotOptions;
+				   $('#container').highcharts(json); 
+		}
+	}); 
+}); 
+
+</script>
+</body>
+</html>

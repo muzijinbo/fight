@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>Bootstrap 实例 - 标签页（Tab）插件</title>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="../code/highcharts.js"></script>
+</head>
+<script type="text/javascript">
+function getParameter(param) 
+{
+	var query = window.location.search; 
+	var iLen = param.length; 
+	
+	var iStart = query.indexOf(param); 
+	if (iStart == -1) 
+		return ""; 
+	iStart += iLen + 1; 
+	var iEnd = query.indexOf("&", iStart); 
+	if (iEnd == -1) 
+		return query.substring(iStart); 
+	return query.substring(iStart, iEnd);  
+} 
+
+$(document).ready(function() {
+	var temp = getParameter("o_nbr"); 
+	//alert(temp+"**"+temp.length);
+	$.ajax({
+		type : "post",
+		url : "../CompanyServlet?method=getCompanySale",
+		data : {
+		},
+		success : function(data) {
+			var jdata = eval("("+data+")");
+			var title = {
+				      text: '所有代理人销售曲线'   
+			};
+			var subtitle = {
+				      text: '2014-07-25'
+			};
+				   
+			var yAxis = {
+				      title: {
+				         text: '销售机票数量'
+			},
+				      plotLines: [{
+				         value: 50000,
+				         width: 2,
+				         color: '#808080'
+				}]
+			};   
+
+			var plotOptions = {
+				        series: {
+				            pointStart: 1
+				}
+			
+			};
+					   
+			var tooltip = {
+            	valueSuffix: '天'
+			}
+
+			var legend = {
+				      layout: 'vertical',
+				      align: 'right',
+				      verticalAlign: 'middle',
+				      borderWidth: 0
+			};
+
+			var series =  jdata;
+				 
+			console.info(jdata);
+			var json = {};
+
+			json.title = title;
+			json.subtitle = subtitle;
+				   
+			json.yAxis = yAxis;
+			json.tooltip = tooltip;
+			json.legend = legend;
+			json.series = series;
+			json.plotOptions =  plotOptions;
+				  
+					
+			$('#home').highcharts(json);
+		}
+	});
+	$.ajax({
+		type : "post",
+		url : "../AgentServlet?method=getAgentSale&o_nbr="+temp,
+		data : {
+		},
+		success : function(data) {
+			var jdata = eval("("+data+")");
+			console.info(jdata);	
+			var chart = {
+				      type: 'area'
+			};
+		    var title = {
+				      text: '代理人买票售票数量'   
+			};
+			var subtitle = {
+				      text: '2017-6-10'  
+		   };
+		   var xAxis = {
+				allowDecimals: false,
+				      labels: {
+				         formatter: function () {
+				            return this.value; // clean, unformatted number for year
+				         }
+				      }
+			};
+			var yAxis = {
+				title: {
+				         text: '代理人每天买票售票数量'
+				},
+				labels: {
+				         formatter: function () {
+				            return this.value / 1000 + 'k';
+				         }
+				}
+			};
+		 	var tooltip = {
+				      pointFormat: '{series.name}票<b>{point.y}张</b><br/>在 {point.x}天'
+			};
+			var plotOptions = {
+				      area: {
+				         pointStart: 1,
+				         marker: {
+				            enabled: false,
+				            symbol: 'circle',
+				            radius: 2,
+				            states: {
+				               hover: {
+				                 enabled: true
+				               }
+				            }
+				         }
+				      }
+				
+			};
+			var series= jdata;     
+				      
+		    var json = {};   
+				   json.chart = chart; 
+				   json.title = title;   
+				   json.subtitle = subtitle; 
+				   json.tooltip = tooltip;
+				   json.xAxis = xAxis;
+				   json.yAxis = yAxis;  
+				   json.series = series;
+				   json.plotOptions = plotOptions;
+				   $('#os').highcharts(json); 
+		}
+	}); 
+	 
+	$.ajax({
+		type : "post",
+		url : "../AgentServlet?method=getAgentChazhi&o_nbr="+temp,
+		data : {
+		},
+		success : function(data) {
+			var jdata = eval("("+data+")");
+			console.info(jdata);	
+			var chart = {
+				      type: 'area'
+			};
+		    var title = {
+				      text: '代理人购买销售差值表'   
+			};
+			var subtitle = {
+				      text: '2017-6-10'  
+		   };
+		   var xAxis = {
+				allowDecimals: false,
+				      labels: {
+				         formatter: function () {
+				            return this.value; // clean, unformatted number for year
+				         }
+				      }
+			};
+			var yAxis = {
+				title: {
+				         text: '代理人每天买票售票数量'
+				},
+				labels: {
+				         formatter: function () {
+				            return this.value / 1000 + 'k';
+				         }
+				}
+			};
+		 	var tooltip = {
+				      pointFormat: '{series.name}票<b>{point.y}张</b><br/>在 {point.x}天'
+			};
+			var plotOptions = {
+				      area: {
+				         pointStart: 1,
+				         marker: {
+				            enabled: false,
+				            symbol: 'circle',
+				            radius: 2,
+				            states: {
+				               hover: {
+				                 enabled: true
+				               }
+				            }
+				         }
+				      }
+				
+			};
+			var series= jdata;     
+				      
+		    var json = {};   
+				   json.chart = chart; 
+				   json.title = title;   
+				   json.subtitle = subtitle; 
+				   json.tooltip = tooltip;
+				   json.xAxis = xAxis;
+				   json.yAxis = yAxis;  
+				   json.series = series;
+				   json.plotOptions = plotOptions;
+			$('#chazhi').highcharts(json); 
+		}
+	});  
+	$.ajax({
+		type : "post",
+		url : "../AgentServlet?method=yuce&o_nbr="+temp,
+		data : {
+		},
+		success : function(data) {
+			var jdata = eval("("+data+")");
+			var title = {
+				      text: '代理人销售预测曲线'   
+			};
+			var subtitle = {
+				      text: '2014-07-25'
+			};
+				   
+			var yAxis = {
+				      title: {
+				         text: '预测销售机票数量'
+			},
+				      plotLines: [{
+				         value: 50000,
+				         width: 2,
+				         color: '#808080'
+				}]
+			};  
+			var xAxis = {
+				      
+				      plotLines: [{
+				         value: 91,
+				         width: 2,
+				         color: '#808080'
+				}]
+			};   
+
+			var plotOptions = {
+				        series: {
+				            pointStart: 1
+				}
+			
+			};
+					   
+			var tooltip = {
+            	valueSuffix: '天'
+			}
+
+			var legend = {
+				      layout: 'vertical',
+				      align: 'right',
+				      verticalAlign: 'middle',
+				      borderWidth: 0
+			};
+
+			var series =  jdata;
+				 
+			console.info(jdata);
+			var json = {};
+
+			json.title = title;
+			json.subtitle = subtitle;
+			json.xAxis = xAxis;
+			json.yAxis = yAxis;
+			json.tooltip = tooltip;
+			json.legend = legend;
+			json.series = series;
+			json.plotOptions =  plotOptions;
+				  
+					
+			$('#yuce').highcharts(json);
+		}
+	});
+	$.ajax({
+		type : "post",
+		url : "../AgentServlet?method=getPies&o_nbr="+temp,
+		data : {
+		},
+		success : function(data) {
+			var jdata = eval("("+data+")");
+			var chart = {
+				       plotBackgroundColor: null,
+				       plotBorderWidth: null,
+				       plotShadow: false
+				   };
+				   var title = {
+				      text: '该代理人市场占有比例'   
+				   };      
+				   var tooltip = {
+				      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+				   };
+				   var plotOptions = {
+				      pie: {
+				         allowPointSelect: true,
+				         cursor: 'pointer',
+				         dataLabels: {
+				            enabled: true,
+				            format: '<b>{point.name}%</b>: {point.percentage:.1f} %',
+				            style: {
+				               color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+				            }
+				         }
+				      }
+				   };
+				   var series= [{
+					      type: 'pie',
+					      name: '代理人市场占有情况',
+					      data: jdata
+					   }];      
+				      
+				   var json = {};   
+				   json.chart = chart; 
+				   json.title = title;     
+				   json.tooltip = tooltip;  
+				   json.series = series;
+				   json.plotOptions = plotOptions;
+				   $('#bili').highcharts(json); 
+		}
+	});  
+	  
+	
+}); 
+</script>
+<body>
+
+<ul id="myTab" class="nav nav-tabs">
+	<li class="active">
+		<a href="#home" data-toggle="tab">
+			 所有代理人销售曲线
+		</a>
+	</li>
+	<!-- <li><a href="#home" data-toggle="tab">所有代理人销售曲线表</a></li> -->
+	<li><a href="#os" data-toggle="tab">代理人销售曲线表</a></li>
+	<li><a href="#chazhi" data-toggle="tab">代理人购买销售差值表</a></li>
+	<li><a href="#yuce" data-toggle="tab">代理人销售预测表</a></li>
+
+	<li><a href="#bili" data-toggle="tab">代理人销售比例</a></li>
+	<!-- <li class="dropdown">
+		<a href="#" id="myTabDrop1" class="dropdown-toggle" 
+		   data-toggle="dropdown">Java 
+			<b class="caret"></b>
+		</a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+			<li><a href="#jmeter" tabindex="-1" data-toggle="tab">jmeter</a></li>
+			<li><a href="#ejb" tabindex="-1" data-toggle="tab">ejb</a></li>
+		</ul>
+	</li> -->
+</ul>
+<div id="myTabContent" class="tab-content">
+	<div class="tab-pane fade in active" id="home">
+		<div id="home" style=" margin: 0 auto"></div>
+	</div>
+	<div class="tab-pane fade" id="os">
+		<div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
+	</div>
+	
+	<div class="tab-pane fade" id="chazhi">
+		<div id="chazhi" style="width: 550px; height: 400px; margin: 0 auto"></div>
+	</div>
+	<div class="tab-pane fade" id="yuce">
+		<div id="yuce" style="width: 550px; height: 400px; margin: 0 auto"></div>
+	</div>
+	<div class="tab-pane fade" id="bili">
+		<div id="bili" style="width: 550px; height: 400px; margin: 0 auto"></div>
+	</div>
+	<!-- <div class="tab-pane fade" id="jmeter">
+		<p>jMeter 是一款开源的测试软件。它是 100% 纯 Java 应用程序，用于负载和性能测试。</p>
+	</div>
+	<div class="tab-pane fade" id="ejb">
+		<p>Enterprise Java Beans（EJB）是一个创建高度可扩展性和强大企业级应用程序的开发架构，部署在兼容应用程序服务器（比如 JBOSS、Web Logic 等）的 J2EE 上。
+		</p>
+	</div> -->
+</div>
+
+
+</body>
+</html>
